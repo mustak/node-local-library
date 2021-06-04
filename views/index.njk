@@ -1,0 +1,36 @@
+{% extends "layouts/default.njk" %}
+
+{%- block headTitle -%}
+    Homepage
+{%- endblock headTitle -%}
+
+{% block main %}
+  <h1>Typescript {{title}}</h1>
+  <p>Welcome to {{title}}</p>
+
+  <ul>
+    <li>Node</li>
+    <li>Express</li>
+    <li>Typescript</li>
+    <li>Nunjucks</li>
+    <li>MongoDB /w Mongoose</li>
+  </ul>
+{% endblock main %}
+
+
+
+
+{# text to maintain formatting #}
+&nbsp;
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+
+"express": "~4.16.1",
+"cookie-parser": "~1.4.4",
+"debug": "~2.6.9",
+"http-errors": "~1.6.3",
+"morgan": "~1.9.1",

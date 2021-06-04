@@ -1,0 +1,14 @@
+.main {
+    max-width: 800px;
+    width: 100%;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+/* Full height image header */
+.bgimg-1 {
+    background-position: center;
+    background-size: cover;
+    background-image: url('/images/mac.jpg');
+    min-height: 100%;
+}
