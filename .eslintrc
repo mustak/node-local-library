@@ -23,7 +23,7 @@
         "quotes": ["error", "single"],
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "eqeqeq": ["error", "always"],
-        "no-var":"error"
+        "no-var": "error"
     },
     "root": true
 }

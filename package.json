@@ -6,7 +6,7 @@
         "start": "node ./dist/bin/www.js",
         "dev": "nodemon -r dotenv/config ./bin/www.ts",
         "build": "tsc -p ./",
-        "populate": "nodemon  -r dotenv/config ./populatedb.ts"
+        "populatedb": "nodemon  -r dotenv/config ./populatedb.ts"
     },
     "dependencies": {
         "async": "^3.2.0",
