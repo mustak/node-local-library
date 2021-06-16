@@ -5,10 +5,12 @@
     padding: 0 1rem;
 }
 
-/* Full height image header */
-.bgimg-1 {
-    background-position: center;
-    background-size: cover;
-    background-image: url('/images/mac.jpg');
-    min-height: 100%;
+.sidebar-nav {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.content {
+    margin-top: 20px;
 }

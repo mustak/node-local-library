@@ -1,9 +1,35 @@
 import express, { Request, Response, NextFunction } from 'express';
+import async from 'async';
 
-import Book from '../models/bookinstance';
+import Book from '../models/book';
+import Author from '../models/author';
+import Genre from '../models/genre';
+import BookInstance, { BookInstanceStatus } from '../models/bookinstance';
 
 export const index = function (req: Request, res: Response) {
-    res.send('NOT IMPLEMENTED: Site Home Page');
+    async.parallel(
+        {
+            book_count: function (callback) {
+                Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+            },
+            book_instance_count: function (callback) {
+                BookInstance.countDocuments({}, callback);
+            },
+            book_instance_available_count: function (callback) {
+                BookInstance.countDocuments({ status: BookInstanceStatus.Available }, callback);
+            },
+            author_count: function (callback) {
+                Author.countDocuments({}, callback);
+            },
+            genre_count: function (callback) {
+                Genre.countDocuments({}, callback);
+            },
+        },
+        function (err, results) {
+            console.log(err);
+            res.render('catalog/index', { title: 'Local Library Home', error: err, data: results });
+        },
+    );
 };
 
 // Display list of all books.

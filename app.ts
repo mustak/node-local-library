@@ -4,12 +4,21 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import nunjucks from 'nunjucks';
+import mongoose from 'mongoose';
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 import catalogRouter from './routes/catalog';
 
 const app = express();
+
+/****************
+ * Mongoose setup
+ *****************/
+mongoose.connect(process.env.DB_HOST!, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.set('view engine', 'njk');
 nunjucks.configure('views', {
