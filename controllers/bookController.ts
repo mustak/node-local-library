@@ -33,8 +33,18 @@ export const index = function (req: Request, res: Response) {
 };
 
 // Display list of all books.
-export const book_list = function (req: Request, res: Response) {
-    res.send('NOT IMPLEMENTED: Book list');
+export const book_list = function (req: Request, res: Response, next: NextFunction) {
+    Book.find({})
+        .select('title author')
+        .sort({ title: 1 })
+        .populate('author')
+        .exec((err, list_books) => {
+            if (err) {
+                return next(err);
+            }
+            res.render('book/book_list', { title: 'Book List', book_list: list_books });
+        });
+    // res.send('NOT IMPLEMENTED: Book list');
 };
 
 // Display detail page for a specific book.

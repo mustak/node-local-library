@@ -1,0 +1,17 @@
+{% extends "layouts/default.njk" %}
+
+{%- block headTitle -%}
+    {{title}}
+{%- endblock headTitle -%}
+
+{% block content %}
+	<h1>{{title}}</h1>
+
+	<ul>
+		{% for book in book_list %}
+			<li><a href='{{book.url}}'>{{book.title}}</a> {{book.author.name}}</li>
+		{% else %}
+			<li>There are no books.</li>
+		{% endfor %}
+	</ul>
+{% endblock content %}
