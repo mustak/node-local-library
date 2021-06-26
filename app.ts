@@ -15,7 +15,9 @@ const app = express();
 /****************
  * Mongoose setup
  *****************/
-mongoose.connect(process.env.DB_HOST!, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose
+    .connect(process.env.DB_HOST!, { useNewUrlParser: true, useUnifiedTopology: true })
+    .catch((error) => console.error.bind(console, error));
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
