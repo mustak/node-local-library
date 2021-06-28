@@ -10,7 +10,7 @@
 	<ul>
 		{% for bookinstance in list %}
 			<li>
-				<a href='{{bookinstance.url}}'>{{bookinstance.book.title}}: {{bookinstance.imprint}}</a> 
+				<a href='{{bookinstance.url}}' title='{{bookinstance.imprint}}' aria-label='{{bookinstance.imprint}}'>{{bookinstance.book.title}}: </a> 
 
 				{% if bookinstance.status === status.Available %}
 					<span class="text-success font-weight-bolder">{{bookinstance.status}}</span>
@@ -20,7 +20,7 @@
 					<span class="text-warning font-weight-bolder">{{bookinstance.status}}</span>
 				{% endif %}
 				{% if bookinstance.status !== status.Available %}
-					<span>Due: {{ bookinstance.due_back }}</span>
+					<span>Due: {{ bookinstance.due_back_formatted }}</span>
 				{% endif %}
 			</li>
 		{% else %}

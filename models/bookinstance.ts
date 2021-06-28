@@ -1,4 +1,6 @@
 import { Model, Schema, Document, PopulatedDoc, model } from 'mongoose';
+import { DateTime } from 'luxon';
+
 import { IBookModel } from '../models/book';
 import { IGenre } from './genre';
 
@@ -19,6 +21,7 @@ export interface IBookInstance {
 
 export interface IBookInstanceModel extends Model<IBookInstance> {
     url: string;
+    due_back_formatted: string;
 }
 
 const BookInstanceSchema = new Schema<IBookInstance, IBookInstanceModel>({
@@ -35,6 +38,10 @@ const BookInstanceSchema = new Schema<IBookInstance, IBookInstanceModel>({
 
 BookInstanceSchema.virtual('url').get(function (this: { _id: string }) {
     return '/catalog/bookinstance/' + this._id;
+});
+
+BookInstanceSchema.virtual('due_back_formatted').get(function (this: { due_back: Date }) {
+    return DateTime.fromJSDate(this.due_back).toLocaleString(DateTime.DATE_MED);
 });
 
 export const bookInstanceModelName = 'BookInstance';
