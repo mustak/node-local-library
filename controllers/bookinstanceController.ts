@@ -1,10 +1,21 @@
 import express, { Request, Response, NextFunction } from 'express';
 
-import BookInstance from '../models/bookinstance';
+import BookInstance, { BookInstanceStatus } from '../models/bookinstance';
 
 // Display list of all BookInstances.
-export const bookinstance_list = function (req: Request, res: Response) {
-    res.send('NOT IMPLEMENTED: BookInstance list');
+export const bookinstance_list = function (req: Request, res: Response, next: NextFunction) {
+    BookInstance.find()
+        .populate('book')
+        .exec(function (error, BIlist) {
+            if (error) {
+                return next(error);
+            }
+            res.render('bookinstance/bookinstance_list', {
+                title: 'Book Instance List',
+                list: BIlist,
+                status: BookInstanceStatus,
+            });
+        });
 };
 
 // Display detail page for a specific BookInstance.

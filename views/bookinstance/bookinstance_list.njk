@@ -1,0 +1,30 @@
+{% extends "layouts/default.njk" %}
+
+{%- block headTitle -%}
+    {{title}}
+{%- endblock headTitle -%}
+
+{% block content %}
+	<h1>{{title}}</h1>
+
+	<ul>
+		{% for bookinstance in list %}
+			<li>
+				<a href='{{bookinstance.url}}'>{{bookinstance.book.title}}: {{bookinstance.imprint}}</a> 
+
+				{% if bookinstance.status === status.Available %}
+					<span class="text-success font-weight-bolder">{{bookinstance.status}}</span>
+				{% elseif bookinstance.status === status.Maintenance %}
+					<span class="text-danger font-weight-bolder">{{bookinstance.status}}</span>
+				{% else %}
+					<span class="text-warning font-weight-bolder">{{bookinstance.status}}</span>
+				{% endif %}
+				{% if bookinstance.status !== status.Available %}
+					<span>Due: {{ bookinstance.due_back }}</span>
+				{% endif %}
+			</li>
+		{% else %}
+			<li>There are no book copies in this library.</li>
+		{% endfor %}
+	</ul>
+{% endblock content %}
