@@ -2,8 +2,16 @@ import express, { Request, Response, NextFunction } from 'express';
 import Author from '../models/author';
 
 // Display list of all Authors.
-export const author_list = function (req: Request, res: Response) {
-    res.send('NOT IMPLEMENTED: Author list');
+export const author_list = function (req: Request, res: Response, next: NextFunction) {
+    Author.find()
+        .sort({ family_name: 1 })
+        .exec(function (err, list_authors) {
+            if (err) {
+                return next(err);
+            }
+            res.render('author/author_list', { title: 'Author List', author_list: list_authors });
+        });
+    // res.send('NOT IMPLEMENTED: Author list');
 };
 
 // Display detail page for a specific Author.
