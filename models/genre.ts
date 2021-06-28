@@ -14,7 +14,7 @@ const GenreSchema = new Schema<IGenre, IGenreModel>({
 });
 
 GenreSchema.virtual('url').get(function (this: IGenre) {
-    return 'catalog/genre/' + this._id;
+    return '/catalog/genre/' + this._id;
 });
 
 export const genreModelName = 'Genre';

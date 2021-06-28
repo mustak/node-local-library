@@ -1,10 +1,19 @@
+import { nextTick } from 'async';
 import express, { Request, Response, NextFunction } from 'express';
 
 import Genre from '../models/genre';
 
 // Display list of all BookInstances.
-export const genre_list = function (req: Request, res: Response) {
-    res.send('NOT IMPLEMENTED: Genre list');
+export const genre_list = function (req: Request, res: Response, next: NextFunction) {
+    Genre.find()
+        .sort({ name: 1 })
+        .exec(function (err, list_genres) {
+            if (err) {
+                return next(err);
+            }
+
+            res.render('genre/genre_list', { title: 'Genre List', genre_list: list_genres });
+        });
 };
 
 // Display detail page for a specific Genre.

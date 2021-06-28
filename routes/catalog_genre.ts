@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Default /book route
 router.get('/', function (req, res, next) {
-    res.redirect('/catalog/books');
+    res.redirect('/catalog/genres');
 });
 
 // GET request for creating a Genre. NOTE This must come before route that displays Genre (uses id).
