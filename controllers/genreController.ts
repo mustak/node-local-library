@@ -1,7 +1,9 @@
-import { nextTick } from 'async';
 import express, { Request, Response, NextFunction } from 'express';
+import createError, { HttpError } from 'http-errors';
+import async from 'async';
 
 import Genre from '../models/genre';
+import Book from '../models/book';
 
 // Display list of all BookInstances.
 export const genre_list = function (req: Request, res: Response, next: NextFunction) {
@@ -17,8 +19,36 @@ export const genre_list = function (req: Request, res: Response, next: NextFunct
 };
 
 // Display detail page for a specific Genre.
-export const genre_detail = function (req: Request, res: Response) {
-    res.send('NOT IMPLEMENTED: Genre detail: ' + req.params.id);
+export const genre_detail = function (req: Request, res: Response, next: NextFunction) {
+    const genreID = req.params.id;
+    async.parallel(
+        {
+            genre: function (callback) {
+                Genre.findById(genreID).exec(callback);
+            },
+            genre_books: function (callback) {
+                Book.find({ genre: genreID }).exec(callback);
+            },
+        },
+        function (err, results) {
+            if (err) {
+                return next(err);
+            }
+            if (results.genre == null) {
+                // No results.
+                let err = new HttpError('Genre not found');
+                err.status = 404;
+                return next(err);
+            }
+            console.log(results);
+            res.render('genre/genre_details', {
+                title: 'Genre Details',
+                genre: results.genre,
+                books: results.genre_books,
+            });
+        },
+    );
+    // res.send('NOT IMPLEMENTED: Genre detail: ' + genreID);
 };
 
 // Display Genre create form on GET.
