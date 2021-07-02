@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import createError, { HttpError } from 'http-errors';
 import async from 'async';
 
 import Book from '../models/book';
@@ -6,6 +7,11 @@ import Author from '../models/author';
 import Genre from '../models/genre';
 import BookInstance, { BookInstanceStatus } from '../models/bookinstance';
 
+/**
+ * Get summaries for all data objects using async
+ * @param req:Request
+ * @param res:Response
+ */
 export const index = function (req: Request, res: Response) {
     async.parallel(
         {
@@ -32,7 +38,12 @@ export const index = function (req: Request, res: Response) {
     );
 };
 
-// Display list of all books.
+/**
+ * Display list of all books.
+ * @param req
+ * @param res
+ * @param next
+ */
 export const book_list = function (req: Request, res: Response, next: NextFunction) {
     Book.find({})
         .select('title author')
@@ -47,9 +58,43 @@ export const book_list = function (req: Request, res: Response, next: NextFuncti
     // res.send('NOT IMPLEMENTED: Book list');
 };
 
-// Display detail page for a specific book.
-export const book_detail = function (req: Request, res: Response) {
-    res.send('NOT IMPLEMENTED: Book detail: ' + req.params.id);
+/**
+ * Display detail page for a specific book.
+ * @param req
+ * @param res
+ * @param next
+ */
+export const book_detail = function (req: Request, res: Response, next: NextFunction) {
+    const bookID = req.params.id;
+
+    async.parallel(
+        {
+            book: function (callback) {
+                Book.findById(bookID).populate('author').populate('genre').exec(callback);
+            },
+            book_instance: function (callback) {
+                BookInstance.find({ book: bookID }).exec(callback);
+            },
+        },
+        function (err, results: any) {
+            if (err) {
+                return next(err);
+            }
+
+            if (results.book == null) {
+                // No results.
+                let err = new HttpError('Book not found');
+                err.status = 404;
+                return next(err);
+            }
+
+            res.render('book/book_detail', {
+                title: results.book.title,
+                book: results.book,
+                book_instances: results.book_instance,
+            });
+        },
+    );
 };
 
 // Display book create form on GET.

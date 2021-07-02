@@ -5,7 +5,13 @@ import async from 'async';
 import Genre from '../models/genre';
 import Book from '../models/book';
 
-// Display list of all BookInstances.
+/**
+ * Display list of all BookInstances.
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 export const genre_list = function (req: Request, res: Response, next: NextFunction) {
     Genre.find()
         .sort({ name: 1 })
@@ -18,7 +24,13 @@ export const genre_list = function (req: Request, res: Response, next: NextFunct
         });
 };
 
-// Display detail page for a specific Genre.
+/**
+ * Display detail page for a specific Genre.
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 export const genre_detail = function (req: Request, res: Response, next: NextFunction) {
     const genreID = req.params.id;
     async.parallel(
@@ -40,7 +52,7 @@ export const genre_detail = function (req: Request, res: Response, next: NextFun
                 err.status = 404;
                 return next(err);
             }
-            console.log(results);
+
             res.render('genre/genre_details', {
                 title: 'Genre Details',
                 genre: results.genre,
