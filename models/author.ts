@@ -1,4 +1,4 @@
-import { Model, Schema, Document, PopulatedDoc, model, Date } from 'mongoose';
+import { Model, Schema, Document, PopulatedDoc, model } from 'mongoose';
 import { DateTime } from 'luxon';
 
 export interface IAuthor {
@@ -8,7 +8,7 @@ export interface IAuthor {
     date_of_death?: Date;
 }
 
-export interface IAuthorModel extends Model<IAuthor> {
+export interface IAuthorModel extends Model<IAuthor>, IAuthor {
     name: string;
     lifespan: string;
     url: string;
@@ -21,11 +21,11 @@ const AuthorSchema = new Schema<IAuthor, IAuthorModel>({
     date_of_death: { type: Date },
 });
 
-AuthorSchema.virtual('name').get(function (this: any) {
+AuthorSchema.virtual('name').get(function (this: IAuthorModel) {
     return this.family_name + ', ' + this.first_name;
 });
 
-AuthorSchema.virtual('lifespan').get(function (this: any) {
+AuthorSchema.virtual('lifespan').get(function (this: IAuthor) {
     const deathdate = this.date_of_death ? DateTime.fromJSDate(this.date_of_death).year : '';
 
     const birthdate = this.date_of_birth ? DateTime.fromJSDate(this.date_of_birth).year : '';

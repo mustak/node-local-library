@@ -16,7 +16,7 @@ export interface IBookInstance {
     book: PopulatedDoc<IBookModel & Document>;
     imprint: string;
     status: BookInstanceStatus;
-    due_back?: Date;
+    due_back: Date;
 }
 
 export interface IBookInstanceModel extends Model<IBookInstance> {
@@ -40,7 +40,7 @@ BookInstanceSchema.virtual('url').get(function (this: { _id: string }) {
     return '/catalog/bookinstance/' + this._id;
 });
 
-BookInstanceSchema.virtual('due_back_formatted').get(function (this: { due_back: Date }) {
+BookInstanceSchema.virtual('due_back_formatted').get(function (this: IBookInstance) {
     return DateTime.fromJSDate(this.due_back).toLocaleString(DateTime.DATE_MED);
 });
 
