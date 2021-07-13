@@ -1,7 +1,16 @@
 import express, { Request, Response, NextFunction } from 'express';
+import createError, { HttpError } from 'http-errors';
 import Author from '../models/author';
+import async from 'async';
 
-// Display list of all Authors.
+import Book from '../models/book';
+
+/**
+ * Display list of all Authors.
+ * @param {Request} req - express Request Object
+ * @param {Response} res - express Response Object
+ * @param {NextFunction} next - express Next object
+ */
 export const author_list = function (req: Request, res: Response, next: NextFunction) {
     Author.find()
         .sort({ family_name: 1 })
@@ -14,9 +23,41 @@ export const author_list = function (req: Request, res: Response, next: NextFunc
     // res.send('NOT IMPLEMENTED: Author list');
 };
 
-// Display detail page for a specific Author.
-export const author_detail = function (req: Request, res: Response) {
-    res.send('NOT IMPLEMENTED: Author detail: ' + req.params.id);
+/**
+ * Display detail page for a specific Author.
+ * @param {Request} req - express Request Object
+ * @param {Response} res - express Response Object
+ * @param {NextFunction} next - express Next object
+ */
+export const author_detail = function (req: Request, res: Response, next: NextFunction) {
+    const authorID = req.params.id;
+
+    async.parallel(
+        {
+            author: function (callback) {
+                Author.findById(authorID).exec(callback);
+            },
+            author_books: function (callback) {
+                Book.find({ author: authorID }).select('title summary').exec(callback);
+            },
+        },
+        function (err, results) {
+            if (err) {
+                return next(err);
+            }
+            if (results.author == null) {
+                const err = new HttpError('Author not found');
+                err.status = 404;
+                return next(err);
+            }
+
+            res.render('author/author_detail', {
+                title: 'Author Details',
+                author: results.author,
+                books: results.author_books,
+            });
+        },
+    );
 };
 
 // Display Author create form on GET.

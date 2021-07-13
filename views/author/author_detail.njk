@@ -1,0 +1,23 @@
+{% extends "layouts/default.njk" %}
+
+{%- block headTitle -%}
+    {{title}}
+{%- endblock headTitle -%}
+
+{% block content %}
+	<h1>Genre: {{author.name}}</h1>
+<p>{{ author.lifespan}}</p>
+	<div style='margin-left:20px;margin-top:20px'>
+		<h4>Books</h4>
+
+		<dl>
+			{% for book in books %}
+				<dt><a href="{{book.url}}">{{book.title}}</a></dt>
+				<dd>{{book.summary}}</dd>
+			{% else %}
+				<p>This author has no books</p>
+		{% endfor %}
+		</dl>
+	</div>
+
+{% endblock content %}
