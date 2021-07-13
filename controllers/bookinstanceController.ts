@@ -1,8 +1,14 @@
 import express, { Request, Response, NextFunction } from 'express';
+import { HttpError } from 'http-errors';
 
 import BookInstance, { BookInstanceStatus } from '../models/bookinstance';
 
-// Display list of all BookInstances.
+/**
+ * Display list of all BookInstances.
+ * @param {Request} req - express Request Object
+ * @param {Response} res - express Response Object
+ * @param {NextFunction} next - express Next object
+ */
 export const bookinstance_list = function (req: Request, res: Response, next: NextFunction) {
     BookInstance.find()
         .populate('book')
@@ -18,9 +24,32 @@ export const bookinstance_list = function (req: Request, res: Response, next: Ne
         });
 };
 
-// Display detail page for a specific BookInstance.
-export const bookinstance_detail = function (req: Request, res: Response) {
-    res.send('NOT IMPLEMENTED: BookInstance detail: ' + req.params.id);
+/**
+ * Display detail page for a specific BookInstance.
+ * @param {Request} req - express Request Object
+ * @param {Response} res - express Response Object
+ * @param {NextFunction} next - express Next object
+ */
+export const bookinstance_detail = function (req: Request, res: Response, next: NextFunction) {
+    const biID = req.params.id;
+
+    BookInstance.findById(biID)
+        .populate('book')
+        .exec(function (err, bookinstance) {
+            if (err) {
+                return next(err);
+            }
+            if (bookinstance == null) {
+                const err = new HttpError('Book copy not found.');
+                err.status = 404;
+                return next(err);
+            }
+
+            res.render('bookinstance/bookinstance_details', {
+                title: `Copy: ${bookinstance.book.title}`,
+                bookinstance,
+            });
+        });
 };
 
 // Display BookInstance create form on GET.

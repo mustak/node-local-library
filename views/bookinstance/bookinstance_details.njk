@@ -1,0 +1,32 @@
+{% extends "layouts/default.njk" %}
+
+{%- block headTitle -%}
+    {{title}}
+{%- endblock headTitle -%}
+
+{% block content %}
+	<h1>ID: {{bookinstance.id}}</h1>
+	<p>
+		<strong>Title: </strong>
+		<a href={{bookinstance.book.url}}>{{ bookinstance.book.title}}</a>	
+	</p>
+	<p>
+		<strong>Imprint:</strong> {{ bookinstance.imprint }}
+	</p>
+	<p>
+		<strong>Status: </strong>
+
+		{% if bookinstance.status=='Available' %}
+				<span class="text-success">{{bookinstance.status}}</span>
+			{% elseif bookinstance.status=='Maintenance' %}
+				<span class="text-danger">{{bookinstance.status}}</span>
+			{% else %}
+				<span class="text-warning">{{bookinstance.status}}</span>
+			{% endif %}
+	</p>
+
+	<p>
+		<strong>Due Back:</strong> {{ bookinstance.due_back_formatted }}
+	</p>
+
+{% endblock content %}
