@@ -41,6 +41,23 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/catalog', catalogRouter);
 
+/**
+ * Set headers
+ */
+//  app.use((inReq: Request, inRes: Response, inNext: NextFunction) => {
+//     // for local dev
+//     // inRes.header('Access-Control-Allow-Origin', '*');
+//     inRes.header('Access-Control-Allow-Origin', `http://localhost:3000`);
+//     inRes.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
+//     inRes.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept');
+//     inRes.header('Vary', 'Origin');
+
+//     // inRes.header('Accept-CH', 'Viewport-Width, Width, Downlink');
+//     // inRes.header('Vary', 'Viewport-Width, Width, Downlink');
+
+//     inNext();
+//   });
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
